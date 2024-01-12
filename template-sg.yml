@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: VPC cloudformation template
+
+Parameters:
+  VpcStackName:
+    Type: String
+    Description: Name of the VPC stack
+    MinLength: 1
+    MaxLength: 255
+
+Resources:
+  SimpleSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${VpcStackName}-VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+      Tags:
+        - Key: Name
+          Value: SimpleSecurityGroup
+
+Outputs:
+  SecurityGroup:
+    Description: A reference to the created security group
+    Value: !Ref SimpleSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-SecurityGroup

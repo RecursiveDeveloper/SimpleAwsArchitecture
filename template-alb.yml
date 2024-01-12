@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: EC2 cloudformation template
+
+Parameters:
+  VpcStackName:
+    Type: String
+    Description: Name of the VPC stack
+    MinLength: 1
+    MaxLength: 255
+    Default: VpcStack
+  SecurityGroupStackName:
+    Type: String
+    Description: Name of the Security Group stack
+    MinLength: 1
+    MaxLength: 255
+    Default: SgStack
+
+Resources:
+  SimpleTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckPort: 80
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 6
+      HealthyThresholdCount: 5
+      IpAddressType: ipv4
+      Matcher:
+        HttpCode: 200
+      Name: SimpleTargetGroup
+      Port: 80
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      TargetType: instance
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${VpcStackName}-VPC
+      Tags:
+        - Key: Name
+          Value: SimpleTargetGroup
+
+  SimpleElasticLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: SimpleElasticLoadBalancer
+      Scheme: internet-facing
+      SecurityGroups:
+        - Fn::ImportValue:
+            !Sub ${SecurityGroupStackName}-SecurityGroup
+      Subnets:
+        - Fn::ImportValue:
+            !Sub ${VpcStackName}-PublicSubnet1
+        - Fn::ImportValue:
+            !Sub ${VpcStackName}-PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: SimpleElasticLoadBalancer
+      Type: application
+
+  SimpleElasticLoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn: !Ref SimpleTargetGroup
+          Type: forward
+      LoadBalancerArn: !Ref SimpleElasticLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+Outputs:
+  TargetGroup:
+    Description: SimpleTargetGroup
+    Value: !Ref SimpleTargetGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-TargetGroup

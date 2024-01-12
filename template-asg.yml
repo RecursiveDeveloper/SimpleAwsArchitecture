@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: EC2 cloudformation template
+
+Parameters:
+  VpcStackName:
+    Type: String
+    Description: Name of the VPC stack
+    MinLength: 1
+    MaxLength: 255
+    Default: VpcStack
+  SecurityGroupStackName:
+    Type: String
+    Description: Name of the Security Group stack
+    MinLength: 1
+    MaxLength: 255
+    Default: SgStack
+  AlbStackName:
+    Type: String
+    Description: Name of the ALB stack
+    MinLength: 1
+    MaxLength: 255
+    Default: AlbStack
+
+Resources:
+  SimpleLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        BlockDeviceMappings:
+          - Ebs:
+              VolumeSize: 8
+              VolumeType: gp3
+              DeleteOnTermination: true
+              Encrypted: true
+            DeviceName: /dev/xvdcz
+        ImageId: ami-0b898040803850657
+        InstanceType: t2.micro
+        Monitoring:
+          Enabled: false
+        SecurityGroupIds:
+          - Fn::ImportValue:
+              !Sub ${SecurityGroupStackName}-SecurityGroup
+        UserData:
+          Fn::Base64: |
+            #!/bin/bash
+            sudo yum update -y
+            sudo amazon-linux-extras install nginx1 -y
+            sudo systemctl enable nginx
+            sudo systemctl start nginx
+      LaunchTemplateName: SimpleLaunchTemplate
+      TagSpecifications:
+        - ResourceType: "launch-template"
+          Tags:
+          - Key: "Stack"
+            Value: "Development"
+      VersionDescription: 1.0
+
+  SimpleAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: SimpleAutoScalingGroup
+      DesiredCapacity: 1
+      MaxSize: 1
+      MinSize: 1
+      LaunchTemplate:
+        LaunchTemplateId: !Ref SimpleLaunchTemplate
+        Version: !GetAtt SimpleLaunchTemplate.LatestVersionNumber
+      VPCZoneIdentifier:
+        - Fn::ImportValue:
+            !Sub ${VpcStackName}-PublicSubnet1
+        - Fn::ImportValue:
+            !Sub ${VpcStackName}-PublicSubnet2
+      TargetGroupARNs:
+        - Fn::ImportValue:
+            !Sub ${AlbStackName}-TargetGroup
