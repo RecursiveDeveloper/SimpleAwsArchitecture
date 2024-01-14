@@ -11,15 +11,15 @@ Resources:
       EnableDnsSupport: true
       InstanceTenancy: default
       Tags:
-        - Key: Name
-          Value: SimpleVPC
+      - Key: Name
+        Value: SimpleVPC
 
   SimpleInternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-        - Key: Name
-          Value: SimpleInternetGateway
+      - Key: Name
+        Value: SimpleInternetGateway
 
   SimpleAttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -32,52 +32,52 @@ Resources:
     Properties:
       VpcId: !Ref SimpleVPC
       CidrBlock: 10.0.1.0/24
-      AvailabilityZone: !Select [ 0, Fn::GetAZs: !Ref 'AWS::Region' ]
+      AvailabilityZone: !Select [0, {'Fn::GetAZs': !Ref 'AWS::Region'}]
       MapPublicIpOnLaunch: true
       Tags:
-        - Key: Name
-          Value: SimplePublicSubnet1
+      - Key: Name
+        Value: SimplePublicSubnet1
 
   SimplePrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref SimpleVPC
       CidrBlock: 10.0.2.0/24
-      AvailabilityZone: !Select [ 0, Fn::GetAZs: !Ref 'AWS::Region' ]
+      AvailabilityZone: !Select [0, {'Fn::GetAZs': !Ref 'AWS::Region'}]
       MapPublicIpOnLaunch: false
       Tags:
-        - Key: Name
-          Value: SimplePrivateSubnet1
+      - Key: Name
+        Value: SimplePrivateSubnet1
 
   SimplePublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref SimpleVPC
       CidrBlock: 10.0.3.0/24
-      AvailabilityZone: !Select [ 1, Fn::GetAZs: !Ref 'AWS::Region' ]
+      AvailabilityZone: !Select [1, {'Fn::GetAZs': !Ref 'AWS::Region'}]
       MapPublicIpOnLaunch: true
       Tags:
-        - Key: Name
-          Value: SimplePublicSubnet2
+      - Key: Name
+        Value: SimplePublicSubnet2
 
   SimplePrivateSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref SimpleVPC
       CidrBlock: 10.0.4.0/24
-      AvailabilityZone: !Select [ 1, Fn::GetAZs: !Ref 'AWS::Region' ]
+      AvailabilityZone: !Select [1, {'Fn::GetAZs': !Ref 'AWS::Region'}]
       MapPublicIpOnLaunch: false
       Tags:
-        - Key: Name
-          Value: SimplePrivateSubnet2
+      - Key: Name
+        Value: SimplePrivateSubnet2
 
   SimpleRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref SimpleVPC
       Tags:
-        - Key: Name
-          Value: SimpleRouteTable
+      - Key: Name
+        Value: SimpleRouteTable
 
   SimpleDefaultRoute:
     Type: AWS::EC2::Route
