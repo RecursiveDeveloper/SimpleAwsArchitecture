@@ -1,0 +1,10 @@
+[
+	{
+		"ParameterKey":"VpcStackName",
+		"ParameterValue":"VpcStack"
+	},
+	{
+		"ParameterKey":"SecurityGroupStackName",
+		"ParameterValue":"SgStack"
+	}
+]

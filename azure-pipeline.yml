@@ -4,7 +4,7 @@ trigger:
     - main
   paths:
     exclude:
-    - azure-pipelines.yml
+    - azure-pipeline*.yml
 
 parameters:
 - name: StackAction
@@ -46,7 +46,7 @@ jobs:
         templateSource: 'file'
         templateFile: '$(Build.Repository.LocalPath)/templates/template-sg.yml'
         templateParametersSource: 'file'
-        templateParametersFile: '$(Build.Repository.LocalPath)/config/stack-parameters.json'
+        templateParametersFile: '$(Build.Repository.LocalPath)/config/template-sg.json'
 
     - task: CloudFormationCreateOrUpdateStack@1
       name: DeployALBStack
@@ -57,7 +57,7 @@ jobs:
         templateSource: 'file'
         templateFile: '$(Build.Repository.LocalPath)/templates/template-alb.yml'
         templateParametersSource: 'file'
-        templateParametersFile: '$(Build.Repository.LocalPath)/config/stack-parameters.json'
+        templateParametersFile: '$(Build.Repository.LocalPath)/config/template-alb.json'
 
     - task: CloudFormationCreateOrUpdateStack@1
       name: DeployASGStack
@@ -68,7 +68,7 @@ jobs:
         templateSource: 'file'
         templateFile: '$(Build.Repository.LocalPath)/templates/template-asg.yml'
         templateParametersSource: 'file'
-        templateParametersFile: '$(Build.Repository.LocalPath)/config/stack-parameters.json'
+        templateParametersFile: '$(Build.Repository.LocalPath)/config/template-asg.json'
 
 - ${{ if eq(parameters.StackAction, 'Destroy') }}:
   - job: Destroy
