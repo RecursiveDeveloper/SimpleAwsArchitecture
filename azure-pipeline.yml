@@ -75,6 +75,20 @@ jobs:
     displayName: Destroy Simple architecture VPC, SGs, ALB and ASG
     steps:
     - task: CloudFormationDeleteStack@1
+      name: DestroyASGStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'AsgStack'
+
+    - task: CloudFormationDeleteStack@1
+      name: DestroyALBStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'AlbStack'
+
+    - task: CloudFormationDeleteStack@1
       name: DestroySecurityGroupStack
       inputs:
         awsCredentials: 'Iac'
@@ -88,16 +102,3 @@ jobs:
         regionName: '${{ parameters.regionName }}'
         stackName: 'VpcStack'
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyALBStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: 'AlbStack'
-
-    - task: CloudFormationDeleteStack@1
-      name: DestroyASGStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: 'AsgStack'
