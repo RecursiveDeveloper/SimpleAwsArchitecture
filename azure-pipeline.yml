@@ -1,0 +1,103 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+    - azure-pipelines.yml
+
+parameters:
+- name: StackAction
+  displayName: StackAction
+  type: string
+  default: Deploy
+  values:
+  - Deploy
+  - Destroy
+- name: regionName
+  displayName: regionName
+  type: string
+  default: 'us-east-1'
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+- ${{ if eq(parameters.StackAction, 'Deploy') }}:
+  - job: Deploy
+    displayName: Deploy Simple architecture VPC, SGs, ALB and ASG
+    steps:
+    - task: CloudFormationCreateOrUpdateStack@1
+      name: DeployVpCStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'VpcStack'
+        templateSource: 'file'
+        templateFile: '$(Build.Repository.LocalPath)/templates/template-vpc.yml'
+        templateParametersSource: 'file'
+
+    - task: CloudFormationCreateOrUpdateStack@1
+      name: DeploySecurityGroupStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'SgStack'
+        templateSource: 'file'
+        templateFile: '$(Build.Repository.LocalPath)/templates/template-sg.yml'
+        templateParametersSource: 'file'
+        templateParametersFile: '$(Build.Repository.LocalPath)/config/stack-parameters.json'
+
+    - task: CloudFormationCreateOrUpdateStack@1
+      name: DeployALBStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'AlbStack'
+        templateSource: 'file'
+        templateFile: '$(Build.Repository.LocalPath)/templates/template-alb.yml'
+        templateParametersSource: 'file'
+        templateParametersFile: '$(Build.Repository.LocalPath)/config/stack-parameters.json'
+
+    - task: CloudFormationCreateOrUpdateStack@1
+      name: DeployASGStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'AsgStack'
+        templateSource: 'file'
+        templateFile: '$(Build.Repository.LocalPath)/templates/template-asg.yml'
+        templateParametersSource: 'file'
+        templateParametersFile: '$(Build.Repository.LocalPath)/config/stack-parameters.json'
+
+- ${{ if eq(parameters.StackAction, 'Destroy') }}:
+  - job: Destroy
+    displayName: Destroy Simple architecture VPC, SGs, ALB and ASG
+    steps:
+    - task: CloudFormationDeleteStack@1
+      name: DestroySecurityGroupStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'SgStack'
+
+    - task: CloudFormationDeleteStack@1
+      name: DestroyVpCStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'VpcStack'
+
+    - task: CloudFormationDeleteStack@1
+      name: DestroyALBStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'AlbStack'
+
+    - task: CloudFormationDeleteStack@1
+      name: DestroyASGStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'AsgStack'
