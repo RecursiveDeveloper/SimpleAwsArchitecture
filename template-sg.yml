@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Description: VPC cloudformation template
+Description: SG cloudformation template
 
 Parameters:
   VpcStackName:
@@ -11,24 +11,52 @@ Parameters:
     Default: VpcStack
 
 Resources:
-  SimpleSecurityGroup:
+  SimpleSecurityGroupInstances:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow http to client host
+      GroupDescription: Security group for instances
       VpcId:
         Fn::ImportValue: !Sub ${VpcStackName}-VPC
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: 0.0.0.0/0
       Tags:
       - Key: Name
-        Value: SimpleSecurityGroup
+        Value: SimpleSecurityGroupInstances
+
+  SimpleSecurityGroupAlb:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Alb
+      VpcId:
+        Fn::ImportValue: !Sub ${VpcStackName}-VPC
+      Tags:
+      - Key: Name
+        Value: SimpleSecurityGroupAlb
+
+  SimpleIngressInstancesHttp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SimpleSecurityGroupInstances
+      IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      SourceSecurityGroupId: !Ref SimpleSecurityGroupAlb
+
+  SimpleIngressAlbHttp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SimpleSecurityGroupAlb
+      IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      CidrIp: 0.0.0.0/0
 
 Outputs:
-  SecurityGroup:
-    Description: A reference to the created security group
-    Value: !Ref SimpleSecurityGroup
+  SecurityGroupInstances:
+    Description: A reference to the created security group for instances
+    Value: !Ref SimpleSecurityGroupInstances
     Export:
-      Name: !Sub ${AWS::StackName}-SecurityGroup
+      Name: !Sub ${AWS::StackName}-SecurityGroupInstances
+  SecurityGroupAlb:
+    Description: A reference to the created security group for ALB
+    Value: !Ref SimpleSecurityGroupAlb
+    Export:
+      Name: !Sub ${AWS::StackName}-SecurityGroupAlb

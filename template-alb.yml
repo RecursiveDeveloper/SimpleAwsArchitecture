@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Description: EC2 cloudformation template
+Description: Alb cloudformation template
 
 Parameters:
   VpcStackName:
@@ -21,7 +21,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckEnabled: true
-      HealthCheckIntervalSeconds: 30
+      HealthCheckIntervalSeconds: 60
       HealthCheckPath: /
       HealthCheckPort: 80
       HealthCheckProtocol: HTTP
@@ -48,7 +48,7 @@ Resources:
       Name: SimpleElasticLoadBalancer
       Scheme: internet-facing
       SecurityGroups:
-      - Fn::ImportValue: !Sub ${SecurityGroupStackName}-SecurityGroup
+      - Fn::ImportValue: !Sub ${SecurityGroupStackName}-SecurityGroupAlb
       Subnets:
       - Fn::ImportValue: !Sub ${VpcStackName}-PublicSubnet1
       - Fn::ImportValue: !Sub ${VpcStackName}-PublicSubnet2

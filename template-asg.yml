@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Description: EC2 cloudformation template
+Description: Asg cloudformation template
 
 Parameters:
   VpcStackName:
@@ -39,7 +39,7 @@ Resources:
         Monitoring:
           Enabled: false
         SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${SecurityGroupStackName}-SecurityGroup
+        - Fn::ImportValue: !Sub ${SecurityGroupStackName}-SecurityGroupInstances
         UserData:
           Fn::Base64: |
             #!/bin/bash
