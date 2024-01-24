@@ -23,10 +23,10 @@ Resources:
               - Effect: Allow
                 Action:
                   - "s3:Get*"
+                Resource: 'arn:aws:s3:::simpleawsarchitecture-artifacts/*'
+              - Effect: Allow
+                Action:
                   - "s3:List*"
-                  - "s3:Describe*"
-                  - "s3-object-lambda:Get*"
-                  - "s3-object-lambda:List*"
                 Resource: 'arn:aws:s3:::simpleawsarchitecture-artifacts'
 
   EC2InstanceProfile:

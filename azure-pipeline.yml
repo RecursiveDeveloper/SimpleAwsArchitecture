@@ -29,9 +29,6 @@ variables:
   IamStackName: 'IamStack'
   AsgStackName: 'AsgStack'
 
-  AmiId: 'ami-0c7217cdde317cfec'
-  InstanceType: 't2.small'
-
 jobs:
 - ${{ if eq(parameters.StackAction, 'Deploy') }}:
   - job: Deploy

@@ -40,11 +40,11 @@ Resources:
             DeleteOnTermination: true
             Encrypted: true
           DeviceName: /dev/xvdcz
-        ImageId: !Ref AmiId
+        ImageId: ami-0c7217cdde317cfec
         IamInstanceProfile:
           Name:
             Fn::ImportValue: !Sub ${IamStackName}-EC2InstanceProfile
-        InstanceType: !Ref InstanceType
+        InstanceType: t2.small
         Monitoring:
           Enabled: false
         SecurityGroupIds:
@@ -56,6 +56,16 @@ Resources:
             apt install apache2 -y
             ufw allow 'Apache'
             systemctl start apache2
+
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            apt install unzip -y
+            unzip awscliv2.zip
+            ./aws/install
+
+            DESTINATION_PATH="/opt/simpleawsarchitecture-artifacts/"
+            S3_URI="s3://simpleawsarchitecture-artifacts/"
+
+            aws s3 cp $S3URI $DESTPATH --recursive
       LaunchTemplateName: SimpleLaunchTemplate
       TagSpecifications:
       - ResourceType: "launch-template"
