@@ -53,7 +53,7 @@ Resources:
           Fn::Base64: |
             #!/bin/bash
             apt update -y
-            apt install apache2
+            apt install apache2 -y
             ufw allow 'Apache'
             systemctl start apache2
       LaunchTemplateName: SimpleLaunchTemplate
