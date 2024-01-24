@@ -60,6 +60,16 @@ jobs:
         templateParametersFile: '$(Build.Repository.LocalPath)/config/template-alb.json'
 
     - task: CloudFormationCreateOrUpdateStack@1
+      name: DeployIAMStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: 'iamStack'
+        templateSource: 'file'
+        templateFile: '$(Build.Repository.LocalPath)/templates/template-iam.yml'
+        templateParametersSource: 'file'
+
+    - task: CloudFormationCreateOrUpdateStack@1
       name: DeployASGStack
       inputs:
         awsCredentials: 'Iac'

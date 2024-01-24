@@ -24,10 +24,13 @@ Parameters:
   AmiId:
     Type: AWS::EC2::Image::Id
     Description: AMI ID
-    Default: ami-05d47d29a4c2d19e1
   InstanceType:
     Type: String
     Description: EC2 instance type
+  IamStackName:
+    Type: String
+    Description: EC2 instance profile
+    Default: iamStack
 
 Resources:
   SimpleLaunchTemplate:
@@ -42,6 +45,9 @@ Resources:
             Encrypted: true
           DeviceName: /dev/xvdcz
         ImageId: !Ref AmiId
+        IamInstanceProfile:
+          Name:
+            Fn::ImportValue: !Sub ${IamStackName}-InstanceProfile
         InstanceType: !Ref InstanceType
         Monitoring:
           Enabled: false
@@ -50,10 +56,10 @@ Resources:
         UserData:
           Fn::Base64: |
             #!/bin/bash
-            sudo yum update -y
-            sudo amazon-linux-extras install nginx1 -y
-            sudo systemctl enable nginx
-            sudo systemctl start nginx
+            apt update -y
+            apt install apache2
+            ufw allow 'Apache'
+            systemctl start apache2
       LaunchTemplateName: SimpleLaunchTemplate
       TagSpecifications:
       - ResourceType: "launch-template"
