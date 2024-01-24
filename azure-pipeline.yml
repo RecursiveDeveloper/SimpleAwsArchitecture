@@ -98,10 +98,6 @@ jobs:
             ParameterValue: $(SecurityGroupStackName)
           - ParameterKey: AlbStackName
             ParameterValue: $(AlbStackName)
-          - ParameterKey: AmiId
-            ParameterValue: $(AmiId)
-          - ParameterKey: InstanceType
-            ParameterValue: $(InstanceType)
           - ParameterKey: IamStackName
             ParameterValue: $(IamStackName)
 

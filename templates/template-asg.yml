@@ -18,12 +18,6 @@ Parameters:
     Description: Name of the ALB stack
     MinLength: 1
     MaxLength: 255
-  AmiId:
-    Type: AWS::EC2::Image::Id
-    Description: AMI ID
-  InstanceType:
-    Type: String
-    Description: EC2 instance type
   IamStackName:
     Type: String
     Description: EC2 instance profile
