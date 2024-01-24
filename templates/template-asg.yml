@@ -53,13 +53,13 @@ Resources:
 
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             apt install unzip -y
-            unzip awscliv2.zip
+            unzip -qq awscliv2.zip
             ./aws/install
 
             DESTINATION_PATH="/opt/simpleawsarchitecture-artifacts/"
             S3_URI="s3://simpleawsarchitecture-artifacts/"
 
-            aws s3 cp $S3URI $DESTPATH --recursive
+            aws s3 cp $S3_URI $DESTINATION_PATH --recursive
       LaunchTemplateName: SimpleLaunchTemplate
       TagSpecifications:
       - ResourceType: "launch-template"
