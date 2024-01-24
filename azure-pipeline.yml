@@ -127,6 +127,13 @@ jobs:
         stackName: $(SecurityGroupStackName)
 
     - task: CloudFormationDeleteStack@1
+      name: DestroyIAMStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: $(IamStackName)
+
+    - task: CloudFormationDeleteStack@1
       name: DestroyVpCStack
       inputs:
         awsCredentials: 'Iac'
