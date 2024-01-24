@@ -8,19 +8,16 @@ Parameters:
     Description: Name of the VPC stack
     MinLength: 1
     MaxLength: 255
-    Default: VpcStack
   SecurityGroupStackName:
     Type: String
     Description: Name of the Security Group stack
     MinLength: 1
     MaxLength: 255
-    Default: SgStack
   AlbStackName:
     Type: String
     Description: Name of the ALB stack
     MinLength: 1
     MaxLength: 255
-    Default: AlbStack
   AmiId:
     Type: AWS::EC2::Image::Id
     Description: AMI ID
@@ -30,7 +27,6 @@ Parameters:
   IamStackName:
     Type: String
     Description: EC2 instance profile
-    Default: iamStack
 
 Resources:
   SimpleLaunchTemplate:
@@ -47,7 +43,7 @@ Resources:
         ImageId: !Ref AmiId
         IamInstanceProfile:
           Name:
-            Fn::ImportValue: !Sub ${IamStackName}-InstanceProfile
+            Fn::ImportValue: !Sub ${IamStackName}-EC2InstanceProfile
         InstanceType: !Ref InstanceType
         Monitoring:
           Enabled: false

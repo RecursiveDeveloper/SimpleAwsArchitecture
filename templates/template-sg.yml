@@ -8,7 +8,6 @@ Parameters:
     Description: Name of the VPC stack
     MinLength: 1
     MaxLength: 255
-    Default: VpcStack
 
 Resources:
   SimpleSecurityGroupInstances:

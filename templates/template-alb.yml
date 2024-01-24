@@ -8,13 +8,11 @@ Parameters:
     Description: Name of the VPC stack
     MinLength: 1
     MaxLength: 255
-    Default: VpcStack
   SecurityGroupStackName:
     Type: String
     Description: Name of the Security Group stack
     MinLength: 1
     MaxLength: 255
-    Default: SgStack
 
 Resources:
   SimpleTargetGroup:
