@@ -10,5 +10,13 @@
 	{
     	"ParameterKey": "AlbStackName",
     	"ParameterValue": "AlbStack"
+	},
+	{
+    	"ParameterKey": "AmiId",
+    	"ParameterValue": "ami-0c7217cdde317cfec"
+	},
+	{
+    	"ParameterKey": "InstanceType",
+    	"ParameterValue": "t2.small"
 	}
 ]

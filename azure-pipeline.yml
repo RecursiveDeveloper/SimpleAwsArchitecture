@@ -32,7 +32,7 @@ jobs:
       inputs:
         awsCredentials: 'Iac'
         regionName: '${{ parameters.regionName }}'
-        stackName: 'VpcStack'
+        stackName: 'VpcStack2'
         templateSource: 'file'
         templateFile: '$(Build.Repository.LocalPath)/templates/template-vpc.yml'
         templateParametersSource: 'file'
@@ -101,4 +101,3 @@ jobs:
         awsCredentials: 'Iac'
         regionName: '${{ parameters.regionName }}'
         stackName: 'VpcStack'
-

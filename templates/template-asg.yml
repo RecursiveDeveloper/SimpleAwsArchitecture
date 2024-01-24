@@ -21,6 +21,13 @@ Parameters:
     MinLength: 1
     MaxLength: 255
     Default: AlbStack
+  AmiId:
+    Type: AWS::EC2::Image::Id
+    Description: AMI ID
+    Default: ami-05d47d29a4c2d19e1
+  InstanceType:
+    Type: String
+    Description: EC2 instance type
 
 Resources:
   SimpleLaunchTemplate:
@@ -34,8 +41,8 @@ Resources:
             DeleteOnTermination: true
             Encrypted: true
           DeviceName: /dev/xvdcz
-        ImageId: ami-0b898040803850657
-        InstanceType: t2.micro
+        ImageId: !Ref AmiId
+        InstanceType: !Ref InstanceType
         Monitoring:
           Enabled: false
         SecurityGroupIds:
