@@ -23,7 +23,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  VpcStackName: 'VpcStack2'
+  VpcStackName: 'VpcStack'
   SecurityGroupStackName: 'SgStack'
   AlbStackName: 'AlbStack'
   IamStackName: 'IamStack'
