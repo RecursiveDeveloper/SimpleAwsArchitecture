@@ -21,6 +21,11 @@ Parameters:
   IamStackName:
     Type: String
     Description: EC2 instance profile
+  S3BucketStackName:
+    Type: String
+    Description: Name of the S3 bucket stack
+    MinLength: 1
+    MaxLength: 255
 
 Resources:
   SimpleLaunchTemplate:
@@ -57,13 +62,13 @@ Resources:
             S3_URI="s3://simpleawsarchitecture-artifacts/"
 
             aws s3 cp $S3_URI $DESTINATION_PATH --recursive
-            sudo chmod +x -R $DESTINATION_PATH
+            chmod +x -R $DESTINATION_PATH
 
-            sudo apt install dos2unix -y
+            apt install dos2unix -y
             find $DESTINATION_PATH -type f -print0 | xargs -0 dos2unix
 
             cd $DESTINATION_PATH
-            sudo bash ./deploy_LAMP.sh
+            bash ./deploy_LAMP.sh
       LaunchTemplateName: SimpleLaunchTemplate
       TagSpecifications:
       - ResourceType: "launch-template"

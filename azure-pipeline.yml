@@ -27,6 +27,7 @@ variables:
   SecurityGroupStackName: 'SgStack'
   AlbStackName: 'AlbStack'
   IamStackName: 'IamStack'
+  S3BucketStackName: 'S3Stack'
   AsgStackName: 'AsgStack'
 
 jobs:
@@ -81,6 +82,28 @@ jobs:
         templateSource: 'file'
         templateFile: '$(Build.Repository.LocalPath)/templates/template-iam.yml'
         templateParametersSource: 'file'
+
+    - task: CloudFormationCreateOrUpdateStack@1
+      name: DeployS3BucketStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: $(S3BucketStackName)
+        templateSource: 'file'
+        templateFile: '$(Build.Repository.LocalPath)/templates/template-s3.yml'
+        templateParametersSource: 'inline'
+        templateParameters: |
+          - ParameterKey: S3BucketName
+            ParameterValue: $(S3BucketStackName)
+
+    - task: S3Upload@1
+      name: UploadInstallers
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: 'us-east-1'
+        bucketName: $(S3BucketStackName)
+        sourceFolder: '$(Build.Repository.LocalPath)/installers'
+        globExpressions: '**'
 
     - task: CloudFormationCreateOrUpdateStack@1
       name: DeployASGStack

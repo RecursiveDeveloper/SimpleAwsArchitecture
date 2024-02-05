@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: S3 cloudformation template
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: Name of the S3 bucket
+    MinLength: 1
+    MaxLength: 255
+
+Resources:
+  SimpleS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+      AccessControl: Private
+      VersioningConfiguration:
+        Status: Disabled
+      Tags:
+      - Key: Name
+        Value: SimpleS3Bucket
+
+Outputs:
+  SimpleS3Bucket:
+    Description: SimpleS3Bucket
+    Value: !Ref SimpleS3Bucket
+    Export:
+      Name: !Sub ${AWS::StackName}-SimpleS3Bucket
