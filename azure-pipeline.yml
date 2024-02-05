@@ -146,7 +146,7 @@ jobs:
         regionName: '${{ parameters.regionName }}'
         awsCommand: 's3api'
         awsSubCommand: 'delete-objects'
-        awsArguments: "--bucket $(S3BucketName) --delete '$(aws s3api list-object-versions --bucket $(S3BucketName) --query='{Objects: Versions[].{Key:Key,VersionId:VersionId}}')'"
+        awsArguments: '--bucket $(S3BucketName) --delete "$(aws s3api list-object-versions --bucket $(S3BucketName) --query="{Objects: Versions[].{Key:Key,VersionId:VersionId}}")"'
 
     - task: AWSCLI@1
       inputs:
@@ -154,7 +154,7 @@ jobs:
         regionName: '${{ parameters.regionName }}'
         awsCommand: 's3api'
         awsSubCommand: 'delete-objects'
-        awsArguments: "--bucket $(S3BucketName) --delete '$(aws s3api list-object-versions --bucket $(S3BucketName) --query='{Objects: DeleteMarkers[].{Key:Key,VersionId:VersionId}}')'"
+        awsArguments: '--bucket $(S3BucketName) --delete "$(aws s3api list-object-versions --bucket $(S3BucketName) --query="{Objects: DeleteMarkers[].{Key:Key,VersionId:VersionId}}")"'
 
     - task: CloudFormationDeleteStack@1
       name: DestroyS3BucketStack
