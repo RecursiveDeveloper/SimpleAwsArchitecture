@@ -147,37 +147,37 @@ jobs:
         regionName: '${{ parameters.regionName }}'
         stackName: $(S3BucketStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyASGStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(AsgStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyASGStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(AsgStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyALBStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(AlbStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyALBStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(AlbStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroySecurityGroupStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(SecurityGroupStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroySecurityGroupStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(SecurityGroupStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyIAMStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(IamStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyIAMStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(IamStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyVpCStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(VpcStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyVpCStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(VpcStackName)
