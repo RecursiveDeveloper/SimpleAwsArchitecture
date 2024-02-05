@@ -12,11 +12,12 @@ Parameters:
 Resources:
   SimpleS3Bucket:
     Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
     Properties:
       BucketName: !Ref S3BucketName
       AccessControl: Private
       VersioningConfiguration:
-        Status: Disabled
+        Status: Suspended
       Tags:
       - Key: Name
         Value: SimpleS3Bucket
