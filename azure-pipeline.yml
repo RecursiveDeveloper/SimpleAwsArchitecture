@@ -125,6 +125,8 @@ jobs:
             ParameterValue: $(AlbStackName)
           - ParameterKey: IamStackName
             ParameterValue: $(IamStackName)
+          - ParameterKey: S3BucketName
+            ParameterValue: $(S3BucketName)
 
 - ${{ if eq(parameters.StackAction, 'Destroy') }}:
   - job: Destroy

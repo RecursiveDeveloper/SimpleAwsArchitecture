@@ -21,9 +21,9 @@ Parameters:
   IamStackName:
     Type: String
     Description: EC2 instance profile
-  S3BucketStackName:
+  S3BucketName:
     Type: String
-    Description: Name of the S3 bucket stack
+    Description: Name of the S3 bucket
     MinLength: 1
     MaxLength: 255
 
@@ -58,8 +58,8 @@ Resources:
             unzip -qq awscliv2.zip
             ./aws/install
 
-            DESTINATION_PATH="/opt/simpleawsarchitecture-artifacts/"
-            S3_URI="s3://simpleawsarchitecture-artifacts/"
+            DESTINATION_PATH="/opt/${S3BucketName}/"
+            S3_URI="s3://${S3BucketName}/"
 
             aws s3 cp $S3_URI $DESTINATION_PATH --recursive
             chmod +x -R $DESTINATION_PATH
