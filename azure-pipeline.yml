@@ -54,7 +54,7 @@ jobs:
       name: UploadInstallers
       inputs:
         awsCredentials: 'Iac'
-        regionName: 'us-east-1'
+        regionName: '${{ parameters.regionName }}'
         bucketName: $(S3BucketName)
         sourceFolder: '$(Build.Repository.LocalPath)/installers'
         globExpressions: '**'
@@ -132,6 +132,21 @@ jobs:
   - job: Destroy
     displayName: Destroy Simple architecture VPC, SGs, ALB and ASG
     steps:
+    - task: AWSCLI@1
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        awsCommand: 's3'
+        awsSubCommand: 'rm'
+        awsArguments: 's3://$(S3BucketName) --recursive'
+
+    - task: CloudFormationDeleteStack@1
+      name: DestroyS3BucketStack
+      inputs:
+        awsCredentials: 'Iac'
+        regionName: '${{ parameters.regionName }}'
+        stackName: $(S3BucketStackName)
+
     - task: CloudFormationDeleteStack@1
       name: DestroyASGStack
       inputs:
