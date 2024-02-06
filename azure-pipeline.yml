@@ -59,86 +59,84 @@ jobs:
         sourceFolder: '$(Build.Repository.LocalPath)/installers'
         globExpressions: '**'
 
-    - task: CloudFormationCreateOrUpdateStack@1
-      name: DeployVpCStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(VpcStackName)
-        templateSource: 'file'
-        templateFile: '$(Build.Repository.LocalPath)/templates/template-vpc.yml'
-        templateParametersSource: 'file'
+    # - task: CloudFormationCreateOrUpdateStack@1
+    #   name: DeployVpCStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(VpcStackName)
+    #     templateSource: 'file'
+    #     templateFile: '$(Build.Repository.LocalPath)/templates/template-vpc.yml'
+    #     templateParametersSource: 'file'
 
-    - task: CloudFormationCreateOrUpdateStack@1
-      name: DeploySecurityGroupStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(SecurityGroupStackName)
-        templateSource: 'file'
-        templateFile: '$(Build.Repository.LocalPath)/templates/template-sg.yml'
-        templateParametersSource: 'inline'
-        templateParameters: |
-          - ParameterKey: VpcStackName
-            ParameterValue: $(VpcStackName)
+    # - task: CloudFormationCreateOrUpdateStack@1
+    #   name: DeploySecurityGroupStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(SecurityGroupStackName)
+    #     templateSource: 'file'
+    #     templateFile: '$(Build.Repository.LocalPath)/templates/template-sg.yml'
+    #     templateParametersSource: 'inline'
+    #     templateParameters: |
+    #       - ParameterKey: VpcStackName
+    #         ParameterValue: $(VpcStackName)
 
-    - task: CloudFormationCreateOrUpdateStack@1
-      name: DeployALBStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(AlbStackName)
-        templateSource: 'file'
-        templateFile: '$(Build.Repository.LocalPath)/templates/template-alb.yml'
-        templateParametersSource: 'inline'
-        templateParameters: |
-          - ParameterKey: VpcStackName
-            ParameterValue: $(VpcStackName)
-          - ParameterKey: SecurityGroupStackName
-            ParameterValue: $(SecurityGroupStackName)
+    # - task: CloudFormationCreateOrUpdateStack@1
+    #   name: DeployALBStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(AlbStackName)
+    #     templateSource: 'file'
+    #     templateFile: '$(Build.Repository.LocalPath)/templates/template-alb.yml'
+    #     templateParametersSource: 'inline'
+    #     templateParameters: |
+    #       - ParameterKey: VpcStackName
+    #         ParameterValue: $(VpcStackName)
+    #       - ParameterKey: SecurityGroupStackName
+    #         ParameterValue: $(SecurityGroupStackName)
 
-    - task: CloudFormationCreateOrUpdateStack@1
-      name: DeployIAMStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(IamStackName)
-        templateSource: 'file'
-        templateFile: '$(Build.Repository.LocalPath)/templates/template-iam.yml'
-        templateParametersSource: 'file'
+    # - task: CloudFormationCreateOrUpdateStack@1
+    #   name: DeployIAMStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(IamStackName)
+    #     templateSource: 'file'
+    #     templateFile: '$(Build.Repository.LocalPath)/templates/template-iam.yml'
+    #     templateParametersSource: 'file'
 
-    - task: CloudFormationCreateOrUpdateStack@1
-      name: DeployASGStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(AsgStackName)
-        templateSource: 'file'
-        templateFile: '$(Build.Repository.LocalPath)/templates/template-asg.yml'
-        templateParametersSource: 'inline'
-        templateParameters: |
-          - ParameterKey: VpcStackName
-            ParameterValue: $(VpcStackName)
-          - ParameterKey: SecurityGroupStackName
-            ParameterValue: $(SecurityGroupStackName)
-          - ParameterKey: AlbStackName
-            ParameterValue: $(AlbStackName)
-          - ParameterKey: IamStackName
-            ParameterValue: $(IamStackName)
-          - ParameterKey: S3BucketName
-            ParameterValue: $(S3BucketName)
+    # - task: CloudFormationCreateOrUpdateStack@1
+    #   name: DeployASGStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(AsgStackName)
+    #     templateSource: 'file'
+    #     templateFile: '$(Build.Repository.LocalPath)/templates/template-asg.yml'
+    #     templateParametersSource: 'inline'
+    #     templateParameters: |
+    #       - ParameterKey: VpcStackName
+    #         ParameterValue: $(VpcStackName)
+    #       - ParameterKey: SecurityGroupStackName
+    #         ParameterValue: $(SecurityGroupStackName)
+    #       - ParameterKey: AlbStackName
+    #         ParameterValue: $(AlbStackName)
+    #       - ParameterKey: IamStackName
+    #         ParameterValue: $(IamStackName)
+    #       - ParameterKey: S3BucketName
+    #         ParameterValue: $(S3BucketName)
 
 - ${{ if eq(parameters.StackAction, 'Destroy') }}:
   - job: Destroy
     displayName: Destroy Simple architecture VPC, SGs, ALB and ASG
     steps:
-    - task: AWSCLI@1
+    - task: PythonScript@0
       inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        awsCommand: 's3'
-        awsSubCommand: 'rm'
-        awsArguments: 's3://$(S3BucketName) --recursive'
+        scriptSource: 'filePath'
+        scriptPath: '$(Build.Repository.LocalPath)/tools/empty_s3bucket.py'
+        arguments: '$(S3BucketName)'
 
     - task: CloudFormationDeleteStack@1
       name: DestroyS3BucketStack
@@ -147,37 +145,37 @@ jobs:
         regionName: '${{ parameters.regionName }}'
         stackName: $(S3BucketStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyASGStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(AsgStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyASGStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(AsgStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyALBStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(AlbStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyALBStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(AlbStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroySecurityGroupStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(SecurityGroupStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroySecurityGroupStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(SecurityGroupStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyIAMStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(IamStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyIAMStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(IamStackName)
 
-    - task: CloudFormationDeleteStack@1
-      name: DestroyVpCStack
-      inputs:
-        awsCredentials: 'Iac'
-        regionName: '${{ parameters.regionName }}'
-        stackName: $(VpcStackName)
+    # - task: CloudFormationDeleteStack@1
+    #   name: DestroyVpCStack
+    #   inputs:
+    #     awsCredentials: 'Iac'
+    #     regionName: '${{ parameters.regionName }}'
+    #     stackName: $(VpcStackName)
