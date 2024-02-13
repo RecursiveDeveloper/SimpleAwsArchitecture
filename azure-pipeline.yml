@@ -38,7 +38,7 @@ variables:
   checkovReportFile: 'TEST-checkov-report.$(checkov-report-format)'
 
 jobs:
-  - template: '$(System.DefaultWorkingDirectory)/azure-pipeline-templates/static-analysis.yml'
+  - template: 'azure-pipeline-templates/static-analysis.yml'
     parameters:
       StackAction: ${{ parameters.StackAction }}
       iacTemplatesPath: ${{ variables.iacTemplatesPath }}
