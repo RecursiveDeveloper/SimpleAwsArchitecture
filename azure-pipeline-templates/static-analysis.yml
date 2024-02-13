@@ -1,13 +1,13 @@
 parameters:
 - name: StackAction
   type: string
-- name: iac-templates-path
+- name: iacTemplatesPath
   type: string
-- name: checkov-report-path
+- name: checkovReportPath
   type: string
-- name: checkov-report-format
+- name: checkovReportFormat
   type: string
-- name: checkov-report-file
+- name: checkovReportFile
   type: string
 
 jobs:
@@ -26,16 +26,16 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            mkdir $(checkov-report-path)
-            checkov -d $(iac-templates-path) \
+            mkdir $(checkovReportPath)
+            checkov -d $(iacTemplatesPath) \
               --framework cloudformation \
-              --output $(checkov-report-format) \
-              --output-file-path '$(checkov-report-path)/$(checkov-report-file)' \
+              --output $(checkovReportFormat) \
+              --output-file-path '$(checkovReportPath)/$(checkovReportFile)' \
               --soft-fail
 
       - task: PublishBuildArtifacts@1
         displayName: 'Export Checkov Static Code Analysis'
         inputs:
-          PathtoPublish: '$(checkov-report-path)/$(checkov-report-file)'
+          PathtoPublish: '$(checkovReportPath)/$(checkovReportFile)'
           ArtifactName: 'checkov-report'
           publishLocation: 'Container'

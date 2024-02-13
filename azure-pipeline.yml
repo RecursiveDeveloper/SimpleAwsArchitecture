@@ -32,19 +32,19 @@ variables:
   AsgStackName: 'AsgStack'
   S3BucketName: 'simpleawsarchitecture-artifacts'
 
-  iac-templates-path: '$(System.DefaultWorkingDirectory)/cloudformation-templates'
-  checkov-report-path: '$(System.DefaultWorkingDirectory)/checkov-report'
-  checkov-report-format: 'junitxml'
-  checkov-report-file: 'TEST-checkov-report.$(checkov-report-format)'
+  iacTemplatesPath: '$(System.DefaultWorkingDirectory)/cloudformation-templates'
+  checkovReportPath: '$(System.DefaultWorkingDirectory)/checkov-report'
+  checkovReportFormat: 'junitxml'
+  checkovReportFile: 'TEST-checkov-report.$(checkov-report-format)'
 
 jobs:
   - template: '$(System.DefaultWorkingDirectory)/azure-pipeline-templates/static-analysis.yml'
     parameters:
       StackAction: ${{ parameters.StackAction }}
-      iac-templates-path: ${{ variables.iac-templates-path }}
-      checkov-report-path: ${{ variables.checkov-report-path }}
-      checkov-report-format: ${{ variables.checkov-report-format }}
-      checkov-report-file: ${{ variables.checkov-report-file }}
+      iacTemplatesPath: ${{ variables.iacTemplatesPath }}
+      checkovReportPath: ${{ variables.checkovReportPath }}
+      checkovReportFormat: ${{ variables.checkovReportFormat }}
+      checkovReportFile: ${{ variables.checkovReportFile }}
 
   # - template: '$(System.DefaultWorkingDirectory)/azure-pipeline-templates/deploy-resources.yml'
   #   parameters:
