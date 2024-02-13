@@ -1,0 +1,41 @@
+parameters:
+- name: StackAction
+  type: string
+- name: iac-templates-path
+  type: string
+- name: checkov-report-path
+  type: string
+- name: checkov-report-format
+  type: string
+- name: checkov-report-file
+  type: string
+
+jobs:
+  - job: CheckovScanner
+    displayName: IAC scanner using Checkov
+    condition: ${{ eq(parameters.StackAction, 'Static Code Analysis') }}
+    steps:
+      - task: Bash@3
+        displayName: 'install Checkov'
+        inputs:
+          targetType: 'inline'
+          script: 'pip3 install checkov'
+
+      - task: Bash@3
+        displayName: 'Checkov Static Code Analysis'
+        inputs:
+          targetType: 'inline'
+          script: |
+            mkdir $(checkov-report-path)
+            checkov -d $(iac-templates-path) \
+              --framework cloudformation \
+              --output $(checkov-report-format) \
+              --output-file-path '$(checkov-report-path)/$(checkov-report-file)' \
+              --soft-fail
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Export Checkov Static Code Analysis'
+        inputs:
+          PathtoPublish: '$(checkov-report-path)/$(checkov-report-file)'
+          ArtifactName: 'checkov-report'
+          publishLocation: 'Container'
