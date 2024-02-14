@@ -1,9 +1,29 @@
 parameters:
-
+  - name: iacTemplatesPath
+    type: string
+  - name: StackAction
+    type: string
+  - name: regionName
+    type: string
+  - name: S3BucketStackName
+    type: string
+  - name: VpcStackName
+    type: string
+  - name: SecurityGroupStackName
+    type: string
+  - name: AlbStackName
+    type: string
+  - name: IamStackName
+    type: string
+  - name: AsgStackName
+    type: string
+  - name: S3BucketName
+    type: string
 
 jobs:
   - job: Deploy
-    condition: ${{ eq(parameters.StackAction, 'Deploy') }}
+    dependsOn: ManualValidation
+    condition: succeeded()
     displayName: Deploy Simple architecture VPC, SGs, ALB and ASG
     steps:
       - task: CloudFormationCreateOrUpdateStack@1

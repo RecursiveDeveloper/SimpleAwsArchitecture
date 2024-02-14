@@ -13,7 +13,6 @@ parameters:
 jobs:
   - job: CheckovScanner
     displayName: IAC scanner using Checkov
-    condition: ${{ eq(parameters.StackAction, 'Static Code Analysis') }}
     steps:
       - task: Bash@3
         displayName: 'install Checkov'

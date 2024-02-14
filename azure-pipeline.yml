@@ -7,18 +7,17 @@ trigger:
     - azure-pipeline*.yml
 
 parameters:
-- name: StackAction
-  displayName: StackAction
-  type: string
-  default: Deploy
-  values:
-  - 'Static Code Analysis'
-  - 'Deploy'
-  - 'Destroy'
-- name: regionName
-  displayName: regionName
-  type: string
-  default: 'us-east-1'
+  - name: StackAction
+    displayName: StackAction
+    type: string
+    default: Deploy
+    values:
+    - 'Deploy'
+    - 'Destroy'
+  - name: regionName
+    displayName: regionName
+    type: string
+    default: 'us-east-1'
 
 pool:
   vmImage: ubuntu-latest
@@ -35,19 +34,51 @@ variables:
   iacTemplatesPath: '$(System.DefaultWorkingDirectory)/cloudformation-templates'
   checkovReportPath: '$(System.DefaultWorkingDirectory)/checkov-report'
   checkovReportFormat: 'junitxml'
-  checkovReportFile: 'TEST-checkov-report.$(checkov-report-format)'
+  checkovReportFile: 'checkov-report.$(checkov-report-format)'
 
 jobs:
+- ${{ if eq(parameters.StackAction, 'Deploy') }}:
   - template: 'azure-pipeline-templates/static-analysis.yml'
     parameters:
-      StackAction: ${{ parameters.StackAction }}
       iacTemplatesPath: ${{ variables.iacTemplatesPath }}
+      StackAction: ${{ parameters.StackAction }}
       checkovReportPath: ${{ variables.checkovReportPath }}
       checkovReportFormat: ${{ variables.checkovReportFormat }}
       checkovReportFile: ${{ variables.checkovReportFile }}
 
-  # - template: '$(System.DefaultWorkingDirectory)/azure-pipeline-templates/deploy-resources.yml'
-  #   parameters:
+  - job: ManualValidation
+    displayName: Manual Validation
+    dependsOn: CheckovScanner
+    condition: succeeded()
+    steps:
+      - task: ManualValidation@0
+        displayName: 'Manual Validation'
+        inputs:
+          instructions: 'Review the Static Code Analysis report and approve or reject the deployment.'
+          onTimeout: 'reject'
 
-  # - template: '$(System.DefaultWorkingDirectory)/azure-pipeline-templates/destroy-resources.yml'
-  #   parameters:
+  - template: 'azure-pipeline-templates/deploy-resources.yml'
+    parameters:
+      iacTemplatesPath: ${{ variables.iacTemplatesPath }}
+      StackAction: ${{ parameters.StackAction }}
+      regionName: ${{ parameters.regionName }}
+      S3BucketStackName: ${{ variables.S3BucketStackName }}
+      VpcStackName: ${{ variables.VpcStackName }}
+      SecurityGroupStackName: ${{ variables.SecurityGroupStackName }}
+      AlbStackName: ${{ variables.AlbStackName }}
+      IamStackName: ${{ variables.IamStackName }}
+      AsgStackName: ${{ variables.AsgStackName }}
+      S3BucketName: ${{ variables.S3BucketName }}
+
+- ${{ if eq(parameters.StackAction, 'Destroy') }}:
+  - template: 'azure-pipeline-templates/destroy-resources.yml'
+    parameters:
+      StackAction: ${{ parameters.StackAction }}
+      regionName: ${{ parameters.regionName }}
+      S3BucketStackName: ${{ variables.S3BucketStackName }}
+      VpcStackName: ${{ variables.VpcStackName }}
+      SecurityGroupStackName: ${{ variables.SecurityGroupStackName }}
+      AlbStackName: ${{ variables.AlbStackName }}
+      IamStackName: ${{ variables.IamStackName }}
+      AsgStackName: ${{ variables.AsgStackName }}
+      S3BucketName: ${{ variables.S3BucketName }}
