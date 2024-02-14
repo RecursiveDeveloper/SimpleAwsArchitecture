@@ -51,7 +51,7 @@ jobs:
   - template: 'azure-pipeline-templates/manual-validation.yml'
     parameters:
       dependencyUsage: true
-      dependentExecution: CheckovScanner
+      dependencyExecution: CheckovScanner
       instructionMessage: 'Review the Static Code Analysis report and approve or reject the deployment.'
 
   - template: 'azure-pipeline-templates/deploy-resources.yml'
