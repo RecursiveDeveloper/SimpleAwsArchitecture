@@ -21,6 +21,8 @@ parameters:
 jobs:
   - job: Destroy
     displayName: Destroy Simple architecture VPC, SGs, ALB and ASG
+    dependsOn: ManualValidation
+    condition: succeeded()
     steps:
       - task: AWSShellScript@1
         inputs:
