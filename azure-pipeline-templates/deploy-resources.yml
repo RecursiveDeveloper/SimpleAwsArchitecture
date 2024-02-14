@@ -33,7 +33,7 @@ jobs:
           regionName: '${{ parameters.regionName }}'
           stackName: $(S3BucketStackName)
           templateSource: 'file'
-          templateFile: '$(iac-templates-path)/template-s3.yml'
+          templateFile: '$(iacTemplatesPath)/template-s3.yml'
           templateParametersSource: 'inline'
           templateParameters: |
             - ParameterKey: S3BucketName
@@ -55,7 +55,7 @@ jobs:
           regionName: '${{ parameters.regionName }}'
           stackName: $(VpcStackName)
           templateSource: 'file'
-          templateFile: '$(iac-templates-path)/template-vpc.yml'
+          templateFile: '$(iacTemplatesPath)/template-vpc.yml'
           templateParametersSource: 'file'
 
       - task: CloudFormationCreateOrUpdateStack@1
@@ -65,7 +65,7 @@ jobs:
           regionName: '${{ parameters.regionName }}'
           stackName: $(SecurityGroupStackName)
           templateSource: 'file'
-          templateFile: '$(iac-templates-path)/template-sg.yml'
+          templateFile: '$(iacTemplatesPath)/template-sg.yml'
           templateParametersSource: 'inline'
           templateParameters: |
             - ParameterKey: VpcStackName
@@ -78,7 +78,7 @@ jobs:
           regionName: '${{ parameters.regionName }}'
           stackName: $(AlbStackName)
           templateSource: 'file'
-          templateFile: '$(iac-templates-path)/template-alb.yml'
+          templateFile: '$(iacTemplatesPath)/template-alb.yml'
           templateParametersSource: 'inline'
           templateParameters: |
             - ParameterKey: VpcStackName
@@ -93,7 +93,7 @@ jobs:
           regionName: '${{ parameters.regionName }}'
           stackName: $(IamStackName)
           templateSource: 'file'
-          templateFile: '$(iac-templates-path)/template-iam.yml'
+          templateFile: '$(iacTemplatesPath)/template-iam.yml'
           templateParametersSource: 'file'
 
       - task: CloudFormationCreateOrUpdateStack@1
@@ -103,7 +103,7 @@ jobs:
           regionName: '${{ parameters.regionName }}'
           stackName: $(AsgStackName)
           templateSource: 'file'
-          templateFile: '$(iac-templates-path)/template-asg.yml'
+          templateFile: '$(iacTemplatesPath)/template-asg.yml'
           templateParametersSource: 'inline'
           templateParameters: |
             - ParameterKey: VpcStackName
