@@ -5,6 +5,8 @@ trigger:
   paths:
     exclude:
     - azure-pipeline*.yml
+    - azure-pipeline-templates/*
+    - tools/*
 
 parameters:
   - name: StackAction
