@@ -11,7 +11,7 @@ parameters:
 
 jobs:
 - ${{ if parameters.dependencyUsage }}:
-  - job: ManualValidationDependency
+  - job: ManualValidation
     displayName: Manual Validation
     dependsOn: ${{ parameters.dependencyExecution }}
     condition: succeeded()
