@@ -1,6 +1,13 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: IAM cloudformation template
 
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: Name of the S3 bucket
+    MinLength: 1
+    MaxLength: 255
+
 Resources:
   InstanceRole:
     Type: 'AWS::IAM::Role'
@@ -23,11 +30,11 @@ Resources:
               - Effect: Allow
                 Action:
                   - "s3:Get*"
-                Resource: 'arn:aws:s3:::simpleawsarchitecture-artifacts/*'
+                Resource: 'arn:aws:s3:::${S3BucketName}/*'
               - Effect: Allow
                 Action:
                   - "s3:List*"
-                Resource: 'arn:aws:s3:::simpleawsarchitecture-artifacts'
+                Resource: 'arn:aws:s3:::${S3BucketName}'
 
   EC2InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'

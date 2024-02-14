@@ -31,7 +31,7 @@ variables:
   IamStackName: 'IamStack'
   S3BucketStackName: 'S3Stack'
   AsgStackName: 'AsgStack'
-  S3BucketName: 'simpleawsarchitecture-artifacts-$(Build.BuildNumber)'
+  S3BucketName: 'simpleawsarchitecture-artifacts-20240214.6'
 
   iacTemplatesPath: '$(System.DefaultWorkingDirectory)/cloudformation-templates'
   checkovReportPath: '$(System.DefaultWorkingDirectory)/checkov-report'

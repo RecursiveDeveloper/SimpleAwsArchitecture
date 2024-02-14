@@ -49,6 +49,19 @@ jobs:
           globExpressions: '**'
 
       - task: CloudFormationCreateOrUpdateStack@1
+        name: DeployIAMStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(IamStackName)
+          templateSource: 'file'
+          templateFile: '$(iacTemplatesPath)/template-iam.yml'
+          templateParametersSource: 'inline'
+          templateParameters: |
+            - ParameterKey: S3BucketName
+              ParameterValue: $(S3BucketName)
+
+      - task: CloudFormationCreateOrUpdateStack@1
         name: DeployVpCStack
         inputs:
           awsCredentials: 'Iac'
@@ -85,16 +98,6 @@ jobs:
               ParameterValue: $(VpcStackName)
             - ParameterKey: SecurityGroupStackName
               ParameterValue: $(SecurityGroupStackName)
-
-      - task: CloudFormationCreateOrUpdateStack@1
-        name: DeployIAMStack
-        inputs:
-          awsCredentials: 'Iac'
-          regionName: '${{ parameters.regionName }}'
-          stackName: $(IamStackName)
-          templateSource: 'file'
-          templateFile: '$(iacTemplatesPath)/template-iam.yml'
-          templateParametersSource: 'file'
 
       - task: CloudFormationCreateOrUpdateStack@1
         name: DeployASGStack
