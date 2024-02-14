@@ -46,16 +46,11 @@ jobs:
       checkovReportFormat: ${{ variables.checkovReportFormat }}
       checkovReportFile: ${{ variables.checkovReportFile }}
 
-  - job: ManualValidation
-    displayName: Manual Validation
-    dependsOn: CheckovScanner
-    condition: succeeded()
-    steps:
-      - task: ManualValidation@0
-        displayName: 'Manual Validation'
-        inputs:
-          instructions: 'Review the Static Code Analysis report and approve or reject the deployment.'
-          onTimeout: 'reject'
+  - template: 'azure-pipeline-templates/manual-validation.yml'
+    parameters:
+      dependencyUsage: true
+      dependentExecution: CheckovScanner
+      instructionMessage: 'Review the Static Code Analysis report and approve or reject the deployment.'
 
   - template: 'azure-pipeline-templates/deploy-resources.yml'
     parameters:
@@ -71,6 +66,10 @@ jobs:
       S3BucketName: ${{ variables.S3BucketName }}
 
 - ${{ if eq(parameters.StackAction, 'Destroy') }}:
+  - template: 'azure-pipeline-templates/manual-validation.yml'
+    parameters:
+      instructionMessage: 'Do you want to destroy the current deployed resources?'
+
   - template: 'azure-pipeline-templates/destroy-resources.yml'
     parameters:
       StackAction: ${{ parameters.StackAction }}

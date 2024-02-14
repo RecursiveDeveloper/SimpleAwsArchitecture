@@ -1,0 +1,38 @@
+parameters:
+  - name: dependencyUsage
+    type: boolean
+    default: false
+  - name: dependencyExecution
+    type: string
+    default: ''
+  - name: instructionMessage
+    type: string
+    default: ''
+
+jobs:
+- ${{ if parameters.dependencyUsage }}:
+  - job: ManualValidationDependency
+    displayName: Manual Validation
+    dependsOn: ${{ parameters.dependencyExecution }}
+    condition: succeeded()
+    pool: server
+    timeoutInMinutes: 1440
+    steps:
+      - task: ManualValidation@0
+        displayName: 'Manual Validation'
+        timeoutInMinutes: 1440
+        inputs:
+          instructions: ${{ parameters.instructionMessage }}
+          onTimeout: 'reject'
+- ${{ else }}:
+  - job: ManualValidation
+    displayName: Manual Validation
+    pool: server
+    timeoutInMinutes: 1440
+    steps:
+      - task: ManualValidation@0
+        displayName: 'Manual Validation'
+        timeoutInMinutes: 1440
+        inputs:
+          instructions: ${{ parameters.instructionMessage }}
+          onTimeout: 'reject'
