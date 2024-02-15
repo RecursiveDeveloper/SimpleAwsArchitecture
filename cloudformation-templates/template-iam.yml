@@ -34,7 +34,7 @@ Resources:
                   - !Join
                     - ''
                     - - 'arn:aws:s3:::'
-                      - !Ref S3BucketStackName
+                      - Fn::ImportValue: !Sub ${S3BucketStackName}-S3BucketName
                       - '/*'
               - Effect: Allow
                 Action:
@@ -43,7 +43,7 @@ Resources:
                   - !Join
                     - ''
                     - - 'arn:aws:s3:::'
-                      - !Ref S3BucketStackName
+                      - Fn::ImportValue: !Sub ${S3BucketStackName}-S3BucketName
 
   EC2InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
