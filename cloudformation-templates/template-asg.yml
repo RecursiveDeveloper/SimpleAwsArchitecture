@@ -43,7 +43,7 @@ Resources:
         IamInstanceProfile:
           Name:
             Fn::ImportValue: !Sub ${IamStackName}-EC2InstanceProfile
-        InstanceType: t3.large
+        InstanceType: t3.medium
         Monitoring:
           Enabled: false
         SecurityGroupIds:
