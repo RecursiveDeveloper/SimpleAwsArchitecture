@@ -24,6 +24,13 @@ jobs:
     dependsOn: ManualValidation
     condition: succeeded()
     steps:
+      - task: CloudFormationDeleteStack@1
+        name: DestroyIAMStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(IamStackName)
+
       - task: AWSShellScript@1
         inputs:
           awsCredentials: 'Iac'
@@ -59,13 +66,6 @@ jobs:
           awsCredentials: 'Iac'
           regionName: '${{ parameters.regionName }}'
           stackName: $(SecurityGroupStackName)
-
-      - task: CloudFormationDeleteStack@1
-        name: DestroyIAMStack
-        inputs:
-          awsCredentials: 'Iac'
-          regionName: '${{ parameters.regionName }}'
-          stackName: $(IamStackName)
 
       - task: CloudFormationDeleteStack@1
         name: DestroyVpCStack
