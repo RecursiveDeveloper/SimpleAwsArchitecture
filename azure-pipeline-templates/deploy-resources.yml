@@ -58,8 +58,8 @@ jobs:
           templateFile: '$(iacTemplatesPath)/template-iam.yml'
           templateParametersSource: 'inline'
           templateParameters: |
-            - ParameterKey: S3BucketName
-              ParameterValue: $(S3BucketName)
+            - ParameterKey: S3BucketStackName
+              ParameterValue: $(S3BucketStackName)
 
       - task: CloudFormationCreateOrUpdateStack@1
         name: DeployVpCStack
