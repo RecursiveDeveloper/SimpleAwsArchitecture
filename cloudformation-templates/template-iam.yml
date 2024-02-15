@@ -30,11 +30,20 @@ Resources:
               - Effect: Allow
                 Action:
                   - "s3:Get*"
-                Resource: 'arn:aws:s3:::${S3BucketName}/*'
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - ${S3BucketName}
+                      - '/*'
               - Effect: Allow
                 Action:
                   - "s3:List*"
-                Resource: 'arn:aws:s3:::${S3BucketName}'
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - ${S3BucketName}
 
   EC2InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
