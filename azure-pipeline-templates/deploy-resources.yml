@@ -9,6 +9,10 @@ parameters:
     type: string
   - name: VpcStackName
     type: string
+  - name: SubnetStackName
+    type: string
+  - name: RouteTableStackName
+    type: string
   - name: SecurityGroupStackName
     type: string
   - name: AlbStackName
@@ -58,8 +62,8 @@ jobs:
           templateFile: '$(iacTemplatesPath)/template-iam.yml'
           templateParametersSource: 'inline'
           templateParameters: |
-            - ParameterKey: S3BucketStackName
-              ParameterValue: $(S3BucketStackName)
+            - ParameterKey: S3BucketName
+              ParameterValue: $(S3BucketName)
 
       - task: CloudFormationCreateOrUpdateStack@1
         name: DeployVpCStack
@@ -70,6 +74,34 @@ jobs:
           templateSource: 'file'
           templateFile: '$(iacTemplatesPath)/template-vpc.yml'
           templateParametersSource: 'file'
+
+      - task: CloudFormationCreateOrUpdateStack@1
+        name: DeploySubnetStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(SubnetStackName)
+          templateSource: 'file'
+          templateFile: '$(iacTemplatesPath)/template-subnet.yml'
+          templateParametersSource: 'inline'
+          templateParameters: |
+            - ParameterKey: VpcStackName
+              ParameterValue: $(VpcStackName)
+
+      - task: CloudFormationCreateOrUpdateStack@1
+        name: DeployRouteTableStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(RouteTableStackName)
+          templateSource: 'file'
+          templateFile: '$(iacTemplatesPath)/template-route_table.yml'
+          templateParametersSource: 'inline'
+          templateParameters: |
+            - ParameterKey: VpcStackName
+              ParameterValue: $(VpcStackName)
+            - ParameterKey: SubnetStackName
+              ParameterValue: $(SubnetStackName)
 
       - task: CloudFormationCreateOrUpdateStack@1
         name: DeploySecurityGroupStack

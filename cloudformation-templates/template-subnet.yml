@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: VPC cloudformation template
+
+Parameters:
+  VpcStackName:
+    Type: String
+    Description: Name of the VPC stack
+    MinLength: 1
+    MaxLength: 255
+
+Resources:
+  SimplePublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Fn::ImportValue: !Sub ${VpcStackName}-VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, {'Fn::GetAZs': !Ref 'AWS::Region'}]
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: SimplePublicSubnet1
+
+  SimplePrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Fn::ImportValue: !Sub ${VpcStackName}-VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [0, {'Fn::GetAZs': !Ref 'AWS::Region'}]
+      MapPublicIpOnLaunch: false
+      Tags:
+      - Key: Name
+        Value: SimplePrivateSubnet1
+
+  SimpleNATGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+        AllocationId: 
+          Fn::ImportValue: !Sub ${VpcStackName}-ElasticIP1
+        SubnetId: !Ref SimplePublicSubnet1
+        Tags:
+        - Key: Name
+          Value: SimpleNATGateway1
+
+  SimplePublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Fn::ImportValue: !Sub ${VpcStackName}-VPC
+      CidrBlock: 10.0.3.0/24
+      AvailabilityZone: !Select [1, {'Fn::GetAZs': !Ref 'AWS::Region'}]
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: SimplePublicSubnet2
+
+  SimplePrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Fn::ImportValue: !Sub ${VpcStackName}-VPC
+      CidrBlock: 10.0.4.0/24
+      AvailabilityZone: !Select [1, {'Fn::GetAZs': !Ref 'AWS::Region'}]
+      MapPublicIpOnLaunch: false
+      Tags:
+      - Key: Name
+        Value: SimplePrivateSubnet2
+
+  SimpleNATGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+        AllocationId: 
+          Fn::ImportValue: !Sub ${VpcStackName}-ElasticIP2
+        SubnetId: !Ref SimplePublicSubnet2
+        Tags:
+        - Key: Name
+          Value: SimpleNATGateway2
+
+Outputs:
+  PublicSubnet1:
+    Description: A reference to the public subnet in the 1st Availability Zone
+    Value: !Ref SimplePublicSubnet1
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicSubnet1
+  PrivateSubnet1:
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref SimplePrivateSubnet1
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnet1
+  PublicSubnet2:
+    Description: A reference to the public subnet in the 2nd Availability Zone
+    Value: !Ref SimplePublicSubnet2
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicSubnet2
+  PrivateSubnet2:
+    Description: A reference to the private subnet in the 2nd Availability Zone
+    Value: !Ref SimplePrivateSubnet2
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateSubnet2
+  NATGateway1:
+    Description: A reference to the NAT gateway in the 1st Availability Zone
+    Value: !Ref SimpleNATGateway1
+    Export:
+      Name: !Sub ${AWS::StackName}-NATGateway1
+  NATGateway2:
+    Description: A reference to the NAT gateway in the 2nd Availability Zone
+    Value: !Ref SimpleNATGateway2
+    Export:
+      Name: !Sub ${AWS::StackName}-NATGateway2

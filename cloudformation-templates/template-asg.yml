@@ -8,6 +8,11 @@ Parameters:
     Description: Name of the VPC stack
     MinLength: 1
     MaxLength: 255
+  SubnetStackName:
+    Type: String
+    Description: Name of the subnet stack
+    MinLength: 1
+    MaxLength: 255
   SecurityGroupStackName:
     Type: String
     Description: Name of the Security Group stack
@@ -88,7 +93,7 @@ Resources:
         LaunchTemplateId: !Ref SimpleLaunchTemplate
         Version: !GetAtt SimpleLaunchTemplate.LatestVersionNumber
       VPCZoneIdentifier:
-      - Fn::ImportValue: !Sub ${VpcStackName}-PublicSubnet1
-      - Fn::ImportValue: !Sub ${VpcStackName}-PublicSubnet2
+      - Fn::ImportValue: !Sub ${SubnetStackName}-PublicSubnet1
+      - Fn::ImportValue: !Sub ${SubnetStackName}-PublicSubnet2
       TargetGroupARNs:
       - Fn::ImportValue: !Sub ${AlbStackName}-TargetGroup

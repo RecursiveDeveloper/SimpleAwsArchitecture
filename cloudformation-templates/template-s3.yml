@@ -21,10 +21,3 @@ Resources:
       Tags:
       - Key: Name
         Value: SimpleS3Bucket
-
-Outputs:
-  SimpleS3Bucket:
-    Description: SimpleS3Bucket
-    Value: !Ref SimpleS3Bucket
-    Export:
-      Name: !Sub ${AWS::StackName}-SimpleS3Bucket

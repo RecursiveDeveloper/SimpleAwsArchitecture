@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: IAM cloudformation template
 
 Parameters:
-  S3BucketStackName:
+  S3BucketName:
     Type: String
-    Description: Name of the S3 stack
+    Description: Name of the S3 bucket
     MinLength: 1
     MaxLength: 255
 
@@ -34,7 +34,7 @@ Resources:
                   - !Join
                     - ''
                     - - 'arn:aws:s3:::'
-                      - Fn::ImportValue: !Sub ${S3BucketStackName}-SimpleS3Bucket
+                      - ${S3BucketName}
                       - '/*'
               - Effect: Allow
                 Action:
@@ -43,7 +43,7 @@ Resources:
                   - !Join
                     - ''
                     - - 'arn:aws:s3:::'
-                      - Fn::ImportValue: !Sub ${S3BucketStackName}-SimpleS3Bucket
+                      - ${S3BucketName}
 
   EC2InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
