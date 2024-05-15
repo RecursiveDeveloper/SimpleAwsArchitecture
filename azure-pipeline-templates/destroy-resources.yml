@@ -7,6 +7,10 @@ parameters:
     type: string
   - name: VpcStackName
     type: string
+  - name: SubnetStackName
+    type: string
+  - name: RouteTableStackName
+    type: string
   - name: SecurityGroupStackName
     type: string
   - name: AlbStackName
@@ -67,6 +71,20 @@ jobs:
           regionName: '${{ parameters.regionName }}'
           stackName: $(S3BucketStackName)
 
+      - task: CloudFormationDeleteStack@1
+        name: DestroyRouteTableStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(RouteTableStackName)
+
+      - task: CloudFormationDeleteStack@1
+        name: DestroySubnetStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(SubnetStackName)
+      
       - task: CloudFormationDeleteStack@1
         name: DestroyVpCStack
         inputs:

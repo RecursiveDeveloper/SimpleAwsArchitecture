@@ -63,6 +63,8 @@ jobs:
       regionName: ${{ parameters.regionName }}
       S3BucketStackName: ${{ variables.S3BucketStackName }}
       VpcStackName: ${{ variables.VpcStackName }}
+      SubnetStackName: ${{ variables.SubnetStackName }}
+      RouteTableStackName: ${{ variables.RouteTableStackName }}
       SecurityGroupStackName: ${{ variables.SecurityGroupStackName }}
       AlbStackName: ${{ variables.AlbStackName }}
       IamStackName: ${{ variables.IamStackName }}
@@ -80,6 +82,8 @@ jobs:
       regionName: ${{ parameters.regionName }}
       S3BucketStackName: ${{ variables.S3BucketStackName }}
       VpcStackName: ${{ variables.VpcStackName }}
+      SubnetStackName: ${{ variables.SubnetStackName }}
+      RouteTableStackName: ${{ variables.RouteTableStackName }}
       SecurityGroupStackName: ${{ variables.SecurityGroupStackName }}
       AlbStackName: ${{ variables.AlbStackName }}
       IamStackName: ${{ variables.IamStackName }}
