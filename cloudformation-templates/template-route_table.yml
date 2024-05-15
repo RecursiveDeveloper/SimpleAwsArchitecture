@@ -58,18 +58,10 @@ Resources:
   SimpleRoute1:
     Type: AWS::EC2::Route
     Properties:
-      DestinationCidrBlock: 10.0.2.0/24
+      DestinationCidrBlock: 0.0.0.0/0
       RouteTableId: !Ref SimplePrivateRouteTable
       NatGatewayId: 
         Fn::ImportValue: !Sub ${SubnetStackName}-NATGateway1
-  
-  SimpleRoute2:
-    Type: AWS::EC2::Route
-    Properties:
-      DestinationCidrBlock: 10.0.4.0/24
-      RouteTableId: !Ref SimplePrivateRouteTable
-      NatGatewayId: 
-        Fn::ImportValue: !Sub ${SubnetStackName}-NATGateway2
 
   SimplePrivateSubnet1RTA:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -78,9 +70,26 @@ Resources:
       SubnetId: 
         Fn::ImportValue: !Sub ${SubnetStackName}-PrivateSubnet1
   
+  SimplePrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: 
+        Fn::ImportValue: !Sub ${VpcStackName}-VPC
+      Tags:
+      - Key: Name
+        Value: SimplePrivateRouteTable2
+
+  SimpleRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId: !Ref SimplePrivateRouteTable2
+      NatGatewayId: 
+        Fn::ImportValue: !Sub ${SubnetStackName}-NATGateway2
+
   SimplePrivateSubnet2RTA:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref SimplePrivateRouteTable
+      RouteTableId: !Ref SimplePrivateRouteTable2
       SubnetId: 
         Fn::ImportValue: !Sub ${SubnetStackName}-PrivateSubnet2
