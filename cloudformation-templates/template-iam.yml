@@ -34,7 +34,7 @@ Resources:
                   - !Join
                     - ''
                     - - 'arn:aws:s3:::'
-                      - ${S3BucketName}
+                      - !Sub ${S3BucketName}
                       - '/*'
               - Effect: Allow
                 Action:
@@ -43,7 +43,7 @@ Resources:
                   - !Join
                     - ''
                     - - 'arn:aws:s3:::'
-                      - ${S3BucketName}
+                      - !Sub ${S3BucketName}
 
   EC2InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'

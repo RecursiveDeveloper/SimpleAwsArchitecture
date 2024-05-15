@@ -93,7 +93,7 @@ Resources:
         LaunchTemplateId: !Ref SimpleLaunchTemplate
         Version: !GetAtt SimpleLaunchTemplate.LatestVersionNumber
       VPCZoneIdentifier:
-      - Fn::ImportValue: !Sub ${SubnetStackName}-PublicSubnet1
-      - Fn::ImportValue: !Sub ${SubnetStackName}-PublicSubnet2
+      - Fn::ImportValue: !Sub ${SubnetStackName}-PrivateSubnet1
+      - Fn::ImportValue: !Sub ${SubnetStackName}-PrivateSubnet2
       TargetGroupARNs:
       - Fn::ImportValue: !Sub ${AlbStackName}-TargetGroup
