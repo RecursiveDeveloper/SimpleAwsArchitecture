@@ -128,6 +128,8 @@ jobs:
           templateParameters: |
             - ParameterKey: VpcStackName
               ParameterValue: $(VpcStackName)
+            - ParameterKey: SubnetStackName
+              ParameterValue: $(SubnetStackName)
             - ParameterKey: SecurityGroupStackName
               ParameterValue: $(SecurityGroupStackName)
 
@@ -143,6 +145,8 @@ jobs:
           templateParameters: |
             - ParameterKey: VpcStackName
               ParameterValue: $(VpcStackName)
+            - ParameterKey: SubnetStackName
+              ParameterValue: $(SubnetStackName)
             - ParameterKey: SecurityGroupStackName
               ParameterValue: $(SecurityGroupStackName)
             - ParameterKey: AlbStackName
