@@ -26,6 +26,8 @@ pool:
 
 variables:
   VpcStackName: 'VpcStack'
+  SubnetStackName: 'SubnetStack'
+  RouteTableStackName: 'RouteTableStack'
   SecurityGroupStackName: 'SgStack'
   AlbStackName: 'AlbStack'
   IamStackName: 'IamStack'
