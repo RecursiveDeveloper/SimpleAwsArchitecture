@@ -16,7 +16,7 @@ Resources:
       DistributionConfig:
         Origins:
         - DomainName: 
-            Fn::ImportValue: !Sub ${AlbStackName}-ALBDNSName
+            Fn::ImportValue: !Sub ${AlbStackName}-DnsName
           Id: SimpleAlbOrigin
           CustomOriginConfig:
             HTTPPort: '80'
