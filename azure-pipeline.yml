@@ -33,11 +33,12 @@ variables:
   IamStackName: 'IamStack'
   S3BucketStackName: 'S3Stack'
   AsgStackName: 'AsgStack'
+  CfnStackName: 'CfnStack'
   S3BucketName: 'simpleawsarchitecture-artifacts-20240214.6'
 
   iacTemplatesPath: '$(System.DefaultWorkingDirectory)/cloudformation-templates'
   checkovReportPath: '$(System.DefaultWorkingDirectory)/checkov-report'
-  checkovReportFormat: 'junitxml'
+  checkovReportFormat: 'csv'
   checkovReportFile: 'checkov-report.$(checkov-report-format)'
 
 jobs:
@@ -69,6 +70,7 @@ jobs:
       AlbStackName: ${{ variables.AlbStackName }}
       IamStackName: ${{ variables.IamStackName }}
       AsgStackName: ${{ variables.AsgStackName }}
+      CfnStackName: ${{ variables.CfnStackName }}
       S3BucketName: ${{ variables.S3BucketName }}
 
 - ${{ if eq(parameters.StackAction, 'Destroy') }}:
@@ -88,4 +90,5 @@ jobs:
       AlbStackName: ${{ variables.AlbStackName }}
       IamStackName: ${{ variables.IamStackName }}
       AsgStackName: ${{ variables.AsgStackName }}
+      CfnStackName: ${{ variables.CfnStackName }}
       S3BucketName: ${{ variables.S3BucketName }}

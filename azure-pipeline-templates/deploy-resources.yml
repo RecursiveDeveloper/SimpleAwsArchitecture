@@ -21,6 +21,8 @@ parameters:
     type: string
   - name: AsgStackName
     type: string
+  - name: CfnStackName
+    type: string
   - name: S3BucketName
     type: string
 
@@ -155,3 +157,16 @@ jobs:
               ParameterValue: $(IamStackName)
             - ParameterKey: S3BucketName
               ParameterValue: $(S3BucketName)
+
+      - task: CloudFormationCreateOrUpdateStack@1
+        name: DeployCfnStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(CfnStackName)
+          templateSource: 'file'
+          templateFile: '$(iacTemplatesPath)/template-cfn.yml'
+          templateParametersSource: 'inline'
+          templateParameters: |
+            - ParameterKey: AlbStackName
+              ParameterValue: $(AlbStackName)

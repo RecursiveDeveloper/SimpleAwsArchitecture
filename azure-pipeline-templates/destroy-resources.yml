@@ -19,6 +19,8 @@ parameters:
     type: string
   - name: AsgStackName
     type: string
+  - name: CfnStackName
+    type: string
   - name: S3BucketName
     type: string
 
@@ -28,6 +30,13 @@ jobs:
     dependsOn: ManualValidation
     condition: succeeded()
     steps:
+      - task: CloudFormationDeleteStack@1
+        name: DestroyCfnStack
+        inputs:
+          awsCredentials: 'Iac'
+          regionName: '${{ parameters.regionName }}'
+          stackName: $(CfnStackName)
+
       - task: CloudFormationDeleteStack@1
         name: DestroyASGStack
         inputs:

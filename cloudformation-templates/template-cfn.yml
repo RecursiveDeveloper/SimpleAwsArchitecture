@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: CF cloudformation template
+
+Parameters:
+  AlbStackName:
+    Type: String
+    Description: Name of the ALB stack
+    MinLength: 1
+    MaxLength: 255
+
+Resources:
+  SimpleCFDistribution:
+    Type: 'AWS::CloudFront::Distribution'
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: 
+            Fn::ImportValue: !Sub ${AlbStackName}-ALBDNSName
+          Id: SimpleAlbOrigin
+          CustomOriginConfig:
+            HTTPPort: '80'
+            OriginProtocolPolicy: http-only
+        Enabled: 'true'
+        DefaultRootObject: index.php
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - DELETE
+          - GET
+          - HEAD
+          - OPTIONS
+          - PATCH
+          - POST
+          - PUT
+          ViewerProtocolPolicy: allow-all
+        PriceClass: PriceClass_100
