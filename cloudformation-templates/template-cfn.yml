@@ -20,13 +20,13 @@ Resources:
         MinTTL: 0
         ParametersInCacheKeyAndForwardedToOrigin:
           CookiesConfig:
-            CookieBehavior: none
+            CookieBehavior: all
           EnableAcceptEncodingBrotli: false
           EnableAcceptEncodingGzip: false
           HeadersConfig:
             HeaderBehavior: none
           QueryStringsConfig:
-            QueryStringBehavior: none
+            QueryStringBehavior: all
 
   SimpleCFDistribution:
     Type: 'AWS::CloudFront::Distribution'
