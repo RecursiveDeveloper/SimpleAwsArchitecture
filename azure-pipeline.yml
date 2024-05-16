@@ -38,7 +38,7 @@ variables:
 
   iacTemplatesPath: '$(System.DefaultWorkingDirectory)/cloudformation-templates'
   checkovReportPath: '$(System.DefaultWorkingDirectory)/checkov-report'
-  checkovReportFormat: 'csv'
+  checkovReportFormat: 'sarif'
   checkovReportFile: 'checkov-report.$(checkov-report-format)'
 
 jobs:
