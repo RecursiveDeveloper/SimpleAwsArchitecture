@@ -1,6 +1,4 @@
 parameters:
-- name: StackAction
-  type: string
 - name: iacTemplatesPath
   type: string
 - name: checkovReportPath

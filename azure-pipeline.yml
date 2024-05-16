@@ -46,7 +46,6 @@ jobs:
   - template: 'azure-pipeline-templates/static-analysis.yml'
     parameters:
       iacTemplatesPath: ${{ variables.iacTemplatesPath }}
-      StackAction: ${{ parameters.StackAction }}
       checkovReportPath: ${{ variables.checkovReportPath }}
       checkovReportFormat: ${{ variables.checkovReportFormat }}
       checkovReportFile: ${{ variables.checkovReportFile }}
@@ -60,7 +59,6 @@ jobs:
   - template: 'azure-pipeline-templates/deploy-resources.yml'
     parameters:
       iacTemplatesPath: ${{ variables.iacTemplatesPath }}
-      StackAction: ${{ parameters.StackAction }}
       regionName: ${{ parameters.regionName }}
       S3BucketStackName: ${{ variables.S3BucketStackName }}
       VpcStackName: ${{ variables.VpcStackName }}
@@ -80,7 +78,6 @@ jobs:
 
   - template: 'azure-pipeline-templates/destroy-resources.yml'
     parameters:
-      StackAction: ${{ parameters.StackAction }}
       regionName: ${{ parameters.regionName }}
       S3BucketStackName: ${{ variables.S3BucketStackName }}
       VpcStackName: ${{ variables.VpcStackName }}

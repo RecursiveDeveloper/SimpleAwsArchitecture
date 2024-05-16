@@ -1,6 +1,4 @@
 parameters:
-  - name: StackAction
-    type: string
   - name: regionName
     type: string
   - name: S3BucketStackName
