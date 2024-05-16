@@ -15,9 +15,9 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: 
+        - Id: SimpleAlbOrigin
+          DomainName: 
             Fn::ImportValue: !Sub ${AlbStackName}-DnsName
-          Id: SimpleAlbOrigin
           CustomOriginConfig:
             HTTPPort: '80'
             OriginProtocolPolicy: http-only
@@ -32,5 +32,6 @@ Resources:
           - PATCH
           - POST
           - PUT
+          TargetOriginId: SimpleAlbOrigin
           ViewerProtocolPolicy: allow-all
         PriceClass: PriceClass_100

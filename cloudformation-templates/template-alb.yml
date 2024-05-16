@@ -76,6 +76,11 @@ Outputs:
     Value: !Ref SimpleTargetGroup
     Export:
       Name: !Sub ${AWS::StackName}-TargetGroup
+  ElasticLoadBalancer:
+    Description: SimpleTargetGroup
+    Value: !Ref SimpleTargetGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-TargetGroup
   DnsName:
     Description: DnsName
     Value: !GetAtt SimpleElasticLoadBalancer.DNSName
